@@ -18,6 +18,8 @@
 
 @implementation XWGradientLabel
 
+#pragma mark - Main
+
 - (instancetype)init
 {
     self = [super init];
@@ -36,16 +38,6 @@
     return self;
 }
 
-- (void)setText:(NSString *)text
-{
-    _textLabel.text = text;
-    
-    CGSize size = [_textLabel sizeThatFits:CGSizeZero];
-    [_textLabel sizeToFit];
-    
-    self.bounds = CGRectMake(0, 0, size.width, size.height);
-}
-
 + (Class)layerClass
 {
     return [CAGradientLayer class];
@@ -56,6 +48,55 @@
     [super layoutSubviews];
     
     self.textLabel.frame = self.bounds;
+}
+
+#pragma mark - Properties
+
+- (void)setText:(NSString *)text
+{
+    _text = text;
+    
+    _textLabel.text = text;
+    CGSize size = [_textLabel sizeThatFits:CGSizeZero];
+    [_textLabel sizeToFit];
+    
+    self.bounds = CGRectMake(0, 0, size.width, size.height);
+}
+
+- (void)setFont:(UIFont *)font
+{
+    _font = font;
+    
+    _textLabel.font = font;
+    CGSize size = [_textLabel sizeThatFits:CGSizeZero];
+    [_textLabel sizeToFit];
+    
+    self.bounds = CGRectMake(0, 0, size.width, size.height);
+}
+
+- (void)setStartPoint:(CGPoint)startPoint
+{
+    _startPoint = startPoint;
+    
+    _gradientLayer.startPoint = startPoint;
+}
+
+- (void)setEndPoint:(CGPoint)endPoint
+{
+    _endPoint = endPoint;
+    
+    _gradientLayer.endPoint = endPoint;
+}
+
+- (void)setColors:(NSArray<UIColor *> *)colors
+{
+    _colors = colors;
+    
+    NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:colors.count];
+    for (UIColor *color in colors) {
+        [mutableArray addObject:(__bridge id)color.CGColor];
+    }
+    _gradientLayer.colors = [mutableArray copy];
 }
 
 @end
